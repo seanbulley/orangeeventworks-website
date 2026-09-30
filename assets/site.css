@@ -712,15 +712,15 @@ footer {
 
 .footer-brand .brand-lockup {
     margin-bottom: 14px;
-    padding: 10px 12px;
-    border-radius: 12px;
-    background: #fff;
+    padding: 0;
+    background: transparent;
 }
 
 .footer-brand .brand-logo {
     width: auto !important;
     height: 34px !important;
     max-width: 155px !important;
+    filter: brightness(0) invert(1);
 }
 
 .sr-only {
