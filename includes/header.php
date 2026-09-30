@@ -6,7 +6,7 @@ $escapedAssetBase = htmlspecialchars($assetBase, ENT_QUOTES, 'UTF-8');
 <header class="site-header">
     <div class="wrap nav">
         <a class="brand-lockup" href="<?= $escapedSiteBase ?>/" aria-label="ORANGE EventWorks home">
-            <img class="brand-logo" src="<?= $escapedAssetBase ?>/orange-eventworks-logo.png" alt="ORANGE EventWorks">
+            <img class="brand-logo" src="<?= $escapedAssetBase ?>/orange-eventworks-logo.png" alt="ORANGE EventWorks" height="30">
         </a>
 
         <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
