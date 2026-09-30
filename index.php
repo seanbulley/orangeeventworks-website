@@ -175,7 +175,8 @@ if (!is_array($selectedInterests)) {
     <?php if ($isDemo): ?><meta name="robots" content="noindex,nofollow,noarchive,nosnippet"><?php endif; ?>
     <title>ORANGE EventWorks | One operating ecosystem for live events</title>
 
-    <link rel="icon" href="<?= e($assetBase) ?>/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="<?= e($assetBase) ?>/orange-icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="<?= e($assetBase) ?>/orange-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -322,14 +323,16 @@ if (!is_array($selectedInterests)) {
             <div class="project-grid">
                 <article class="project-card kit">
                     <span class="tag">Community equipment</span>
-                    <h3>ORANGE Kit</h3>
+                    <h3 class="sr-only">ORANGE Kit</h3>
+                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-kit-logo.png" alt="ORANGE Kit">
                     <p>A shared pool of professional, event-ready equipment for Pride and community organisations, reducing the need for every event to buy the same specialist kit for a handful of days each year.</p>
                     <a class="project-link" href="https://orangekit.co.uk/" target="_blank" rel="noopener noreferrer">Visit ORANGE Kit →</a>
                 </article>
 
                 <article class="project-card talent">
                     <span class="tag">Artist & talent booking</span>
-                    <h3>ORANGE Talent</h3>
+                    <h3 class="sr-only">ORANGE Talent</h3>
+                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-talent-logo.png" alt="ORANGE Talent">
                     <p>A talent and artist booking service designed for events, helping organisers find, book and manage performers with the wider operational context in mind.</p>
                 </article>
             </div>
@@ -444,8 +447,7 @@ if (!is_array($selectedInterests)) {
         <div class="footer-row">
             <div class="footer-brand">
                 <a class="brand-lockup" href="<?= e($siteBase) ?>/" aria-label="ORANGE EventWorks home">
-                    <span class="brand-mark" aria-hidden="true"><span></span></span>
-                    <span class="brand-words"><strong>ORANGE</strong><em>EventWorks</em></span>
+                    <img class="brand-logo" src="<?= e($assetBase) ?>/orange-eventworks-logo.png" alt="ORANGE EventWorks">
                 </a>
                 <p>One operating ecosystem for live events. Details coming soon.</p>
             </div>
