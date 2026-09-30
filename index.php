@@ -342,19 +342,20 @@ if (!is_array($selectedInterests)) {
     <section class="audience">
         <div class="wrap">
             <div class="section-head">
-                <div class="eyebrow">Where we start</div>
-                <h2>Built from Pride. Designed to go wider.</h2>
-                <p>Pride organisers are the first focused audience because they often run complex, volunteer-heavy events with stages, traders, temporary teams and significant control-room needs. The same problems exist well beyond Pride.</p>
+                <div class="eyebrow">Built from experience</div>
+                <h2>Built by event organisers, from the ground up.</h2>
+                <p>ORANGE EventWorks grew out of the events we organise and deliver ourselves. Across our combined experience, we kept running into the same problems: disconnected systems, duplicated admin, information living in too many places and operational tools that never quite matched how an event actually works.</p>
+                <p>So we started building what we wanted to use. Each part of EventWorks has been shaped by real situations, real event days and the lessons that come from making things work under pressure. The result is an ecosystem designed around practical event delivery, with everything we learn feeding back into what we build next.</p>
             </div>
 
-            <div class="audience-row" aria-label="EventWorks audiences">
-                <span class="audience-chip">Pride organisations</span>
-                <span class="audience-chip">Festivals</span>
-                <span class="audience-chip">Council events</span>
-                <span class="audience-chip">Community events</span>
-                <span class="audience-chip">Venues</span>
-                <span class="audience-chip">Event agencies</span>
-                <span class="audience-chip">Production companies</span>
+            <div class="audience-row" aria-label="Experience behind ORANGE EventWorks">
+                <span class="audience-chip">Stage & artist operations</span>
+                <span class="audience-chip">Trader management</span>
+                <span class="audience-chip">Volunteer & staff teams</span>
+                <span class="audience-chip">Event control</span>
+                <span class="audience-chip">Communications & technology</span>
+                <span class="audience-chip">Accessibility</span>
+                <span class="audience-chip">Live event delivery</span>
             </div>
         </div>
     </section>
