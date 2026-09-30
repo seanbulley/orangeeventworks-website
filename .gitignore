@@ -1,0 +1,7 @@
+orangeeventworks-config.php
+orangeeventworks-demo-config.php
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

@@ -1,0 +1,133 @@
+name: Deploy ORANGE EventWorks
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: orange-eventworks-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Validate PHP syntax
+        run: |
+          set -euo pipefail
+          php -v
+          find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Install SSH password helper
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass rsync
+
+      - name: Select deployment environment
+        env:
+          PROD_PATH: ${{ vars.HOSTINGER_PRODUCTION_DEPLOY_PATH }}
+          DEMO_PATH: ${{ vars.HOSTINGER_DEMO_DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            test -n "$PROD_PATH" || { echo "HOSTINGER_PRODUCTION_DEPLOY_PATH is not configured"; exit 1; }
+            echo "DEPLOYMENT_ENV=production" >> "$GITHUB_ENV"
+            echo "DEPLOY_PATH=$PROD_PATH" >> "$GITHUB_ENV"
+          elif [ "$GITHUB_REF_NAME" = "develop" ]; then
+            test -n "$DEMO_PATH" || { echo "HOSTINGER_DEMO_DEPLOY_PATH is not configured"; exit 1; }
+            echo "DEPLOYMENT_ENV=demo" >> "$GITHUB_ENV"
+            echo "DEPLOY_PATH=$DEMO_PATH" >> "$GITHUB_ENV"
+          else
+            echo "Unsupported branch: $GITHUB_REF_NAME"
+            exit 1
+          fi
+
+      - name: Configure SSH host
+        env:
+          SSH_HOST: ${{ vars.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT }}
+        run: |
+          set -euo pipefail
+
+          test -n "$SSH_HOST" || { echo "HOSTINGER_SSH_HOST is not configured"; exit 1; }
+          test -n "$SSH_PORT" || { echo "HOSTINGER_SSH_PORT is not configured"; exit 1; }
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Check deployment target
+        env:
+          SSHPASS: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
+          SSH_HOST: ${{ vars.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ vars.HOSTINGER_SSH_USER }}
+        run: |
+          set -euo pipefail
+
+          test -n "$SSHPASS" || { echo "HOSTINGER_SSH_PASSWORD is not configured"; exit 1; }
+          test -n "$SSH_USER" || { echo "HOSTINGER_SSH_USER is not configured"; exit 1; }
+
+          if [ "$DEPLOYMENT_ENV" = "production" ]; then
+            case "$DEPLOY_PATH" in
+              */public_html) ;;
+              *) echo "Production path must end in /public_html"; exit 1 ;;
+            esac
+          else
+            case "$DEPLOY_PATH" in
+              */public_html/demo) ;;
+              *) echo "Demo path must end in /public_html/demo"; exit 1 ;;
+            esac
+          fi
+
+          if [ "$DEPLOYMENT_ENV" = "demo" ]; then
+            sshpass -e ssh               -o PreferredAuthentications=password               -o PubkeyAuthentication=no               -p "$SSH_PORT"               "$SSH_USER@$SSH_HOST"               "mkdir -p '$DEPLOY_PATH' && test -w '$DEPLOY_PATH'"
+          else
+            sshpass -e ssh               -o PreferredAuthentications=password               -o PubkeyAuthentication=no               -p "$SSH_PORT"               "$SSH_USER@$SSH_HOST"               "test -d '$DEPLOY_PATH' && test -w '$DEPLOY_PATH'"
+          fi
+
+      - name: Deploy website
+        env:
+          SSHPASS: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
+          SSH_HOST: ${{ vars.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ vars.HOSTINGER_SSH_USER }}
+        run: |
+          set -euo pipefail
+
+          EXTRA_EXCLUDES=()
+          if [ "$DEPLOYMENT_ENV" = "production" ]; then
+            EXTRA_EXCLUDES+=(--exclude 'demo/')
+          fi
+
+          sshpass -e rsync -az --delete-delay --itemize-changes             --exclude '.git/'             --exclude '.github/'             --exclude '.gitignore'             --exclude 'README.md'             --exclude 'config.example.php'             --exclude 'orangeeventworks-config.php'             --exclude 'orangeeventworks-demo-config.php'             --exclude '.htaccess'             --exclude '.well-known/'             --exclude 'error_log'             "${EXTRA_EXCLUDES[@]}"             --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r             -e "ssh -p $SSH_PORT -o PreferredAuthentications=password -o PubkeyAuthentication=no"             ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+
+      - name: Mark demo as noindex
+        if: github.ref_name == 'develop'
+        env:
+          SSHPASS: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
+          SSH_HOST: ${{ vars.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ vars.HOSTINGER_SSH_USER }}
+        run: |
+          set -euo pipefail
+
+          printf '%s\n'             '<IfModule mod_headers.c>'             '  Header always set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"'             '</IfModule>' |             sshpass -e ssh               -o PreferredAuthentications=password               -o PubkeyAuthentication=no               -p "$SSH_PORT"               "$SSH_USER@$SSH_HOST"               "cat > '$DEPLOY_PATH/.htaccess'"
+
+      - name: Deployment summary
+        run: |
+          echo "Deployed $GITHUB_SHA from $GITHUB_REF_NAME to $DEPLOYMENT_ENV ($DEPLOY_PATH)"
