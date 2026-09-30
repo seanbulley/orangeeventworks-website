@@ -180,8 +180,8 @@ if (!is_array($selectedInterests)) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= e($assetBase) ?>/site.css">
-    <script src="<?= e($assetBase) ?>/site.js" defer></script>
+    <link rel="stylesheet" href="<?= e($assetBase) ?>/site.css?v=<?= (int)@filemtime(__DIR__ . '/assets/site.css') ?>">
+    <script src="<?= e($assetBase) ?>/site.js?v=<?= (int)@filemtime(__DIR__ . '/assets/site.js') ?>" defer></script>
 </head>
 <body>
 
@@ -324,7 +324,7 @@ if (!is_array($selectedInterests)) {
                 <article class="project-card kit">
                     <span class="tag">Community equipment</span>
                     <h3 class="sr-only">ORANGE Kit</h3>
-                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-kit-logo.png" alt="ORANGE Kit">
+                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-kit-logo.png" alt="ORANGE Kit" height="46">
                     <p>A shared pool of professional, event-ready equipment for Pride and community organisations, reducing the need for every event to buy the same specialist kit for a handful of days each year.</p>
                     <a class="project-link" href="https://orangekit.co.uk/" target="_blank" rel="noopener noreferrer">Visit ORANGE Kit →</a>
                 </article>
@@ -332,7 +332,7 @@ if (!is_array($selectedInterests)) {
                 <article class="project-card talent">
                     <span class="tag">Artist & talent booking</span>
                     <h3 class="sr-only">ORANGE Talent</h3>
-                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-talent-logo.png" alt="ORANGE Talent">
+                    <img class="project-logo" src="<?= e($assetBase) ?>/orange-talent-logo.png" alt="ORANGE Talent" height="46">
                     <p>A talent and artist booking service designed for events, helping organisers find, book and manage performers with the wider operational context in mind.</p>
                 </article>
             </div>
@@ -447,7 +447,7 @@ if (!is_array($selectedInterests)) {
         <div class="footer-row">
             <div class="footer-brand">
                 <a class="brand-lockup" href="<?= e($siteBase) ?>/" aria-label="ORANGE EventWorks home">
-                    <img class="brand-logo" src="<?= e($assetBase) ?>/orange-eventworks-logo.png" alt="ORANGE EventWorks">
+                    <img class="brand-logo" src="<?= e($assetBase) ?>/orange-eventworks-logo.png" alt="ORANGE EventWorks" height="34">
                 </a>
                 <p>One operating ecosystem for live events. Details coming soon.</p>
             </div>
