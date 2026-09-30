@@ -60,9 +60,9 @@ img, svg { display: block; max-width: 100%; }
 }
 
 .brand-logo {
-    width: auto;
-    height: 42px;
-    max-width: 185px;
+    width: auto !important;
+    height: 30px !important;
+    max-width: 140px !important;
     object-fit: contain;
 }
 
@@ -511,12 +511,12 @@ section { padding: 92px 0; }
 
 .project-logo {
     display: block;
-    width: auto;
-    height: 72px;
-    max-width: min(260px, 78%);
+    width: auto !important;
+    height: 46px !important;
+    max-width: 190px !important;
     object-fit: contain;
     object-position: left center;
-    margin: 54px 0 20px;
+    margin: 40px 0 20px;
 }
 
 .project-card p {
@@ -718,9 +718,9 @@ footer {
 }
 
 .footer-brand .brand-logo {
-    width: auto;
-    height: 46px;
-    max-width: 200px;
+    width: auto !important;
+    height: 34px !important;
+    max-width: 155px !important;
 }
 
 .sr-only {
@@ -813,14 +813,14 @@ footer {
     .hero h1 { font-size: 58px; }
 
     .brand-logo {
-        height: 36px;
-        max-width: 160px;
+        height: 28px !important;
+        max-width: 130px !important;
     }
 
     .project-logo {
-        height: 58px;
-        max-width: min(230px, 82%);
-        margin-top: 44px;
+        height: 42px !important;
+        max-width: 175px !important;
+        margin-top: 34px;
     }
 
     .story-grid,
